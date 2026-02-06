@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NETLAB+ VE Instructor Quick Start Guide</title>
+<style>
+:root {
+    --navy: #1B2A4A;
+    --dark-blue: #1E3A5F;
+    --mid-blue: #2C5F8A;
+    --sky: #3D8EC9;
+    --accent: #00A8E8;
+    --accent-light: #B3E5FC;
+    --warm: #F5A623;
+    --warm-light: #FFF3E0;
+    --success: #43A047;
+    --success-light: #E8F5E9;
+    --danger: #E53935;
+    --danger-light: #FFEBEE;
+    --bg: #F4F6FA;
+    --card: #FFFFFF;
+    --text: #1A1A2E;
+    --text-muted: #5A6677;
+    --border: #D8DEE9;
+    --shadow: 0 2px 12px rgba(27,42,74,0.08);
+    --shadow-lg: 0 8px 32px rgba(27,42,74,0.12);
+    --radius: 10px;
+    --radius-lg: 16px;
+    --teal: #00897B;
+    --teal-light: #E0F2F1;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+}
+
+/* SKIP NAV - ADA */
+.skip-nav {
+    position: absolute; left: -9999px; top: auto;
+    background: var(--navy); color: #FFFFFF; padding: 12px 24px;
+    z-index: 10000; font-size: 0.95rem; border-radius: 0 0 8px 0;
+    text-decoration: underline;
+}
+.skip-nav:focus { left: 0; top: 0; }
+
+/* HEADER */
+header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--dark-blue) 60%, var(--mid-blue) 100%);
+    color: #FFFFFF;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.header-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px;
+    max-width: 1400px; margin: 0 auto;
+    flex-wrap: wrap; gap: 12px;
+}
+
+.header-brand {
+    display: flex; align-items: center; gap: 14px;
+}
+
+.header-brand svg { flex-shrink: 0; }
+
+.header-brand h1 {
+    font-size: 1.35rem; font-weight: 700; letter-spacing: -0.3px;
+    color: #FFFFFF;
+}
+
+.header-brand .subtitle {
+    font-size: 0.78rem; color: var(--accent-light); font-weight: 400; display: block; margin-top: 2px;
+}
+
+.header-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,168,232,0.2); border: 1px solid rgba(0,168,232,0.4);
+    color: var(--accent-light); padding: 4px 12px; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* SEARCH */
+.search-container {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px; padding: 6px 14px;
+    min-width: 260px; transition: all 0.2s;
+}
+.search-container:focus-within {
+    background: rgba(255,255,255,0.2);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,168,232,0.3);
+}
+.search-container svg { flex-shrink: 0; opacity: 0.7; }
+#globalSearch {
+    background: none; border: none; color: #FFFFFF;
+    font-size: 0.9rem; outline: none; width: 100%;
+}
+#globalSearch::placeholder { color: rgba(255,255,255,0.55); }
+
+.search-results-dropdown {
+    display: none; position: absolute; top: 100%; right: 0;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow-lg);
+    max-height: 400px; overflow-y: auto; width: 420px; z-index: 200;
+    margin-top: 4px;
+}
+.search-results-dropdown.active { display: block; }
+.search-result-item {
+    padding: 12px 16px; border-bottom: 1px solid #F0F0F0;
+    cursor: pointer; transition: background 0.15s;
+}
+.search-result-item:hover, .search-result-item:focus {
+    background: var(--accent-light);
+}
+.search-result-item .sr-section {
+    font-size: 0.72rem; color: var(--sky); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.search-result-item .sr-title {
+    font-size: 0.92rem; font-weight: 600; color: var(--text);
+    margin-top: 2px;
+}
+.search-result-item .sr-snippet {
+    font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;
+}
+.search-result-item mark {
+    background: #FFF176; color: var(--text); padding: 0 2px; border-radius: 2px;
+}
+.search-no-results {
+    padding: 24px 16px; text-align: center; color: var(--text-muted);
+    font-size: 0.9rem;
+}
+.search-wrapper { position: relative; }
+
+/* NAV */
+nav {
+    background: rgba(0,0,0,0.15);
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.nav-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; gap: 2px;
+    padding: 0 24px; overflow-x: auto;
+}
+.nav-inner a {
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    padding: 10px 16px; font-size: 0.82rem; font-weight: 500;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap; transition: all 0.2s;
+}
+.nav-inner a:hover, .nav-inner a:focus {
+    color: #FFFFFF; background: rgba(255,255,255,0.08);
+    border-bottom-color: var(--accent);
+}
+.nav-inner a.active {
+    color: #FFFFFF; border-bottom-color: var(--warm);
+}
+
+/* MAIN */
+main {
+    max-width: 1060px; margin: 0 auto;
+    padding: 32px 24px 80px;
+}
+
+/* SECTIONS */
+.section {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.section-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 20px 28px;
+    background: linear-gradient(135deg, #F8FAFD 0%, #EDF2F7 100%);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+}
+.section-header:hover { background: linear-gradient(135deg, #EDF2F7 0%, #E2E8F0 100%); }
+.section-header:focus { outline: 3px solid var(--accent); outline-offset: -3px; }
+
+.section-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.section-icon.blue { background: #E3F2FD; color: var(--mid-blue); }
+.section-icon.teal { background: var(--teal-light); color: var(--teal); }
+.section-icon.orange { background: var(--warm-light); color: #E65100; }
+.section-icon.green { background: var(--success-light); color: var(--success); }
+.section-icon.red { background: var(--danger-light); color: var(--danger); }
+
+.section-header h2 {
+    font-size: 1.15rem; font-weight: 700; color: var(--navy);
+    flex: 1;
+}
+.section-header .section-desc {
+    font-size: 0.8rem; color: var(--text-muted); font-weight: 400;
+    display: block; margin-top: 2px;
+}
+
+.collapse-icon {
+    width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; background: rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+}
+.section.collapsed .collapse-icon { transform: rotate(-90deg); }
+.section.collapsed .section-body { display: none; }
+
+.section-body {
+    padding: 28px;
+}
+
+/* STEPS */
+.step-list { counter-reset: step-counter; }
+.step {
+    display: flex; gap: 18px;
+    padding: 18px 0;
+    border-bottom: 1px solid #F0F3F7;
+    align-items: flex-start;
+}
+.step:last-child { border-bottom: none; }
+
+.step-number {
+    counter-increment: step-counter;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--accent); color: #FFFFFF;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+    flex-shrink: 0; margin-top: 2px;
+}
+
+.step-content { flex: 1; }
+.step-content p { margin-bottom: 10px; }
+.step-content p:last-child { margin-bottom: 0; }
+
+/* SCREENSHOT FIGURE */
+.screenshot-figure {
+    margin: 16px 0;
+    border: 2px solid #E2E8F0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #FAFBFC;
+}
+.screenshot-figure .screenshot-img {
+    width: 100%; display: block;
+    background: #F0F4F8;
+    min-height: 180px;
+    position: relative;
+}
+.screenshot-figure .screenshot-img svg {
+    width: 100%; height: auto; display: block;
+}
+.screenshot-figure figcaption {
+    padding: 10px 16px;
+    background: #F7F9FB;
+    border-top: 1px solid #E2E8F0;
+    font-size: 0.8rem; color: var(--text-muted);
+    font-style: italic;
+}
+.screenshot-figure .page-ref {
+    font-weight: 600; color: var(--mid-blue); font-style: normal;
+    font-size: 0.75rem;
+}
+
+/* TIPS */
+.tip {
+    display: flex; gap: 12px;
+    padding: 14px 18px; border-radius: var(--radius);
+    margin: 14px 0; font-size: 0.9rem;
+    align-items: flex-start;
+}
+.tip-icon {
+    width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px;
+}
+.tip.info { background: #E3F2FD; border-left: 4px solid var(--accent); }
+.tip.warning { background: #FFF8E1; border-left: 4px solid var(--warm); }
+.tip.success { background: var(--success-light); border-left: 4px solid var(--success); }
+.tip.danger { background: var(--danger-light); border-left: 4px solid var(--danger); }
+
+/* KEY POINT CALLOUT */
+.key-point {
+    background: linear-gradient(135deg, #EDE7F6 0%, #E8EAF6 100%);
+    border: 1px solid #D1C4E9;
+    border-radius: var(--radius);
+    padding: 18px 22px; margin: 16px 0;
+}
+.key-point strong { color: #4527A0; }
+
+/* SUBSECTION */
+.subsection {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 2px solid #F0F3F7;
+}
+.subsection h3 {
+    font-size: 1.05rem; font-weight: 700; color: var(--dark-blue);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+}
+.subsection h3 .sub-icon {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+}
+
+/* BACK TO TOP */
+#backToTop {
+    position: fixed; bottom: 28px; right: 28px;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--navy); color: #FFFFFF;
+    border: none; cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    display: none; align-items: center; justify-content: center;
+    transition: all 0.3s; z-index: 90;
+    font-size: 0;
+}
+#backToTop:hover { background: var(--mid-blue); transform: scale(1.1); }
+#backToTop:focus { outline: 3px solid var(--accent); outline-offset: 3px; }
+#backToTop.visible { display: flex; }
+
+/* PROGRESS */
+.progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: var(--warm); z-index: 200;
+    transition: width 0.1s;
+    width: 0%;
+}
+
+/* FOOTER */
+footer {
+    background: var(--navy); color: rgba(255,255,255,0.7);
+    text-align: center; padding: 24px;
+    font-size: 0.82rem;
+}
+footer a { color: var(--accent-light); }
+
+/* TABLE OF CONTENTS */
+.toc-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px; margin-top: 16px;
+}
+.toc-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px;
+    background: #F8FAFD;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none; color: var(--text);
+    transition: all 0.2s;
+}
+.toc-card:hover, .toc-card:focus {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+.toc-card .toc-num {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem; color: #FFFFFF;
+    flex-shrink: 0;
+}
+.toc-card .toc-label {
+    font-weight: 600; font-size: 0.9rem;
+}
+.toc-card .toc-sublabel {
+    font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 2px;
+}
+
+/* HIGHLIGHT */
+.highlight { background: #FFF176; padding: 0 3px; border-radius: 3px; }
+.text-bold { font-weight: 700; }
+.text-code {
+    font-family: "Consolas", "Courier New", monospace;
+    background: #F0F0F0; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.88em;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .header-top { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
+    .search-container { min-width: 100%; }
+    .search-results-dropdown { width: calc(100vw - 32px); right: auto; left: 0; }
+    .nav-inner { padding: 0 12px; }
+    main { padding: 20px 14px 60px; }
+    .section-body { padding: 20px 16px; }
+    .section-header { padding: 16px 18px; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .step { gap: 12px; }
+}
+
+/* PRINT */
+@media print {
+    header, nav, #backToTop, .progress-bar, footer { display: none !important; }
+    .section { break-inside: avoid; box-shadow: none; border: 1px solid #CCC; }
+    .section.collapsed .section-body { display: block !important; }
+    main { max-width: 100%; padding: 0; }
+}
+
+/* HIGH CONTRAST */
+@media (prefers-contrast: high) {
+    :root { --border: #000000; --text-muted: #333333; }
+    .section-header { border-bottom: 2px solid #000000; }
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+}
+
+/* FOCUS VISIBLE */
+:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+<a class="skip-nav" href="#main-content">Skip to main content</a>
+
+<!-- HEADER -->
+<header>
+    <div class="header-top">
+        <div class="header-brand">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                <rect width="44" height="44" rx="10" fill="rgba(255,255,255,0.15)"/>
+                <rect x="8" y="28" width="4" height="8" rx="1" fill="#4FC3F7"/>
+                <rect x="14" y="22" width="4" height="14" rx="1" fill="#29B6F6"/>
+                <rect x="20" y="16" width="4" height="20" rx="1" fill="#039BE5"/>
+                <rect x="26" y="10" width="4" height="26" rx="1" fill="#0277BD"/>
+                <rect x="32" y="8" width="4" height="28" rx="1" fill="#01579B"/>
+                <text x="22" y="44" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.6)" font-weight="600">NDG</text>
+            </svg>
+            <div>
+                <h1>NETLAB+ VE Instructor Guide
+                    <span class="subtitle">Quick Start &mdash; Teaching a Pre-Configured Course</span>
+                </h1>
+            </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <span class="header-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                Quick Start Edition
+            </span>
+            <div class="search-wrapper">
+                <div class="search-container">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="search" id="globalSearch" placeholder="Search this guide…" aria-label="Search the guide" autocomplete="off">
+                </div>
+                <div class="search-results-dropdown" id="searchResults" role="listbox" aria-label="Search results"></div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Section navigation">
+        <div class="nav-inner" role="tablist">
+            <a href="#overview" role="tab">Overview</a>
+            <a href="#login" role="tab">Login</a>
+            <a href="#interface" role="tab">Interface</a>
+            <a href="#roster" role="tab">Class Roster</a>
+            <a href="#scheduling" role="tab">Scheduling</a>
+            <a href="#labsession" role="tab">Lab Sessions</a>
+            <a href="#usage" role="tab">Usage Reports</a>
+        </div>
+    </nav>
+</header>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+
+<!-- OVERVIEW / TOC -->
+<section class="section" id="overview">
+    <div class="section-header" tabindex="0" role="button" aria-expanded="true" aria-controls="overview-body" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+        <div class="section-icon blue">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
+        <div style="flex:1">
+            <h2>Welcome &amp; Quick Navigation
+                <span class="section-desc">Your streamlined guide to teaching with NETLAB+ VE</span>
+            </h2>
+        </div>
+        <div class="collapse-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+    </div>
+    <div class="section-body" id="overview-body">
+        <p>This <strong>Quick Start Guide</strong> is designed for instructors who have been <strong>assigned to a course with pre-populated content</strong> on NETLAB+ Virtual Edition. Your class, content, and student accounts have already been set up by your administrator or lead instructor.</p>
+
+        <div class="tip info" role="note">
+            <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#0277BD" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div><strong>What this guide covers:</strong> Logging in, navigating the interface, managing your class roster, scheduling and entering lab reservations, and viewing usage reports. Advanced features like creating classes, designing pods/labs, managing accounts, and configuring content are covered in the full Instructor Guide.</div>
+        </div>
+
+        <h3 style="margin:20px 0 12px;font-size:1rem;color:var(--navy);">Jump to a Section</h3>
+        <div class="toc-grid">
+            <a href="#login" class="toc-card">
+                <div class="toc-num" style="background:var(--mid-blue);">1</div>
+                <div><span class="toc-label">Initial Login</span><span class="toc-sublabel">Password, email &amp; time settings</span></div>
+            </a>
+            <a href="#interface" class="toc-card">
+                <div class="toc-num" style="background:var(--teal);">2</div>
+                <div><span class="toc-label">MyNETLAB Interface</span><span class="toc-sublabel">Home page, settings &amp; logout</span></div>
+            </a>
+            <a href="#roster" class="toc-card">
+                <div class="toc-num" style="background:var(--sky);">3</div>
+                <div><span class="toc-label">Manage Class Roster</span><span class="toc-sublabel">Add/drop learners, teams &amp; passwords</span></div>
+            </a>
+            <a href="#scheduling" class="toc-card">
+                <div class="toc-num" style="background:#E65100;">4</div>
+                <div><span class="toc-label">Schedule Lab Reservations</span><span class="toc-sublabel">ILT, student, team &amp; personal labs</span></div>
+            </a>
+            <a href="#labsession" class="toc-card">
+                <div class="toc-num" style="background:var(--success);">5</div>
+                <div><span class="toc-label">Enter a Lab Session</span><span class="toc-sublabel">Topology, content, devices &amp; tools</span></div>
+            </a>
+            <a href="#usage" class="toc-card">
+                <div class="toc-num" style="background:#6A1B9A;">6</div>
+                <div><span class="toc-label">Usage Reporting</span><span class="toc-sublabel">Class, account &amp; lab usage data</span></div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 1: INITIAL LOGIN -->
+<section class="section" id="login">
+    <div class="section-header" tabindex="0" role="button" aria-expanded="true" aria-controls="login-body" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+        <div class="section-icon blue">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div style="flex:1">
+            <h2>1. Initial Login
+                <span class="section-desc">Access NETLAB+ for the first time and configure your account</span>
+            </h2>
+        </div>
+        <div class="collapse-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="section-body" id="login-body">
+
+        <p>Your NETLAB+ administrator will provide you with the <strong>URL or IP address</strong> of the NETLAB+ system, along with a <strong>username</strong> and <strong>initial password</strong>.</p>
+
+        <div class="step-list">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <p>Open a web browser and navigate to the URL or IP address of your NETLAB+ system. Supported browsers include <strong>Google Chrome</strong> (recommended), <strong>Mozilla Firefox</strong>, <strong>Apple Safari</strong> (Mac), and <strong>Microsoft Edge</strong>.</p>
+                    <div class="tip info" role="note">
+                        <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#0277BD" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        <div>Cookies and JavaScript must be enabled in your browser. Using the most recent version of your browser is recommended.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <p>Enter your <strong>Username</strong> and <strong>Password</strong> into the login fields, then click the <strong>Login</strong> button.</p>
+                    <!-- Screenshot illustration: Login Page -->
+                    <figure class="screenshot-figure">
+                        <div class="screenshot-img">
+                            <svg viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NETLAB+ login page showing username and password fields with a Login button">
+                                <rect width="700" height="340" fill="#E8EEF4"/>
+                                <rect x="0" y="0" width="700" height="50" fill="#2C5F8A"/>
+                                <text x="30" y="32" font-family="Segoe UI,sans-serif" font-size="16" fill="#FFFFFF" font-weight="700">NETLAB+</text>
+                                <text x="350" y="32" font-family="Segoe UI,sans-serif" font-size="12" fill="rgba(255,255,255,0.7)" text-anchor="middle">Virtual Edition</text>
+                                <rect x="175" y="80" width="350" height="230" rx="8" fill="#FFFFFF" stroke="#D0D8E0" stroke-width="1"/>
+                                <text x="350" y="115" font-family="Segoe UI,sans-serif" font-size="16" fill="#1B2A4A" font-weight="700" text-anchor="middle">Login to NETLAB+</text>
+                                <text x="210" y="150" font-family="Segoe UI,sans-serif" font-size="12" fill="#5A6677">Username</text>
+                                <rect x="210" y="157" width="280" height="32" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                <text x="210" y="210" font-family="Segoe UI,sans-serif" font-size="12" fill="#5A6677">Password</text>
+                                <rect x="210" y="217" width="280" height="32" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                <rect x="210" y="268" width="280" height="32" rx="4" fill="#2C5F8A"/>
+                                <text x="350" y="289" font-family="Segoe UI,sans-serif" font-size="13" fill="#FFFFFF" font-weight="600" text-anchor="middle">Login</text>
+                            </svg>
+                        </div>
+                        <figcaption><span class="page-ref">Instructor Guide p. 4</span> &mdash; The NETLAB+ login page. Enter the credentials provided by your administrator.</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <p>On your first login, you will be <strong>required to change your password</strong>. NETLAB+ enforces strong passwords that must be 7 or more characters, contain both letters and numbers, and not be a common dictionary word.</p>
+                    <div class="tip warning" role="note">
+                        <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#E65100" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <div><strong>Password tip:</strong> Combine a word with numbers, for example &ldquo;airplane789&rdquo;. You may not reuse your initial password.</div>
+                    </div>
+                    <!-- Screenshot illustration: Change Password -->
+                    <figure class="screenshot-figure">
+                        <div class="screenshot-img">
+                            <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Change Password screen with New Password and Retype New Password fields">
+                                <rect width="700" height="260" fill="#F4F6FA"/>
+                                <rect x="125" y="20" width="450" height="220" rx="8" fill="#FFFFFF" stroke="#D0D8E0"/>
+                                <text x="350" y="55" font-family="Segoe UI,sans-serif" font-size="16" fill="#1B2A4A" font-weight="700" text-anchor="middle">Change Password</text>
+                                <text x="175" y="90" font-family="Segoe UI,sans-serif" font-size="12" fill="#5A6677">New Password</text>
+                                <rect x="175" y="97" width="350" height="30" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                <text x="175" y="148" font-family="Segoe UI,sans-serif" font-size="12" fill="#5A6677">Retype New Password</text>
+                                <rect x="175" y="155" width="350" height="30" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                <rect x="175" y="200" width="120" height="30" rx="4" fill="#2C5F8A"/>
+                                <text x="235" y="220" font-family="Segoe UI,sans-serif" font-size="12" fill="#FFFFFF" font-weight="600" text-anchor="middle">Submit</text>
+                                <rect x="310" y="200" width="120" height="30" rx="4" fill="#E0E0E0"/>
+                                <text x="370" y="220" font-family="Segoe UI,sans-serif" font-size="12" fill="#555" font-weight="600" text-anchor="middle">Cancel</text>
+                            </svg>
+                        </div>
+                        <figcaption><span class="page-ref">Instructor Guide pp. 5&ndash;7</span> &mdash; Enter and confirm your new password, then click Submit.</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <p>You may optionally <strong>update your email address</strong>. This step can be skipped during initial login.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <p>Configure your <strong>Date and Time Settings</strong>. These are critical for the lab scheduler to display times correctly.</p>
+                    <!-- Screenshot illustration: Date/Time Settings -->
+                    <figure class="screenshot-figure">
+                        <div class="screenshot-img">
+                            <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Date and Time Settings page showing Time Zone, Date Format, Time Format, and First Day of Week options">
+                                <rect width="700" height="280" fill="#F4F6FA"/>
+                                <rect x="100" y="15" width="500" height="250" rx="8" fill="#FFFFFF" stroke="#D0D8E0"/>
+                                <text x="350" y="48" font-family="Segoe UI,sans-serif" font-size="15" fill="#1B2A4A" font-weight="700" text-anchor="middle">Date and Time Settings</text>
+                                <text x="150" y="82" font-family="Segoe UI,sans-serif" font-size="11" fill="#5A6677">Time Zone</text>
+                                <rect x="150" y="88" width="400" height="28" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                <text x="165" y="107" font-family="Segoe UI,sans-serif" font-size="10" fill="#888">(UTC-05:00) Eastern Time</text>
+                                <text x="150" y="135" font-family="Segoe UI,sans-serif" font-size="11" fill="#5A6677">Date Display Format</text>
+                                <rect x="150" y="141" width="200" height="28" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                <text x="165" y="160" font-family="Segoe UI,sans-serif" font-size="10" fill="#888">YYYY-MM-DD</text>
+                                <text x="150" y="188" font-family="Segoe UI,sans-serif" font-size="11" fill="#5A6677">Time Display Format</text>
+                                <rect x="150" y="194" width="200" height="28" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                <text x="165" y="213" font-family="Segoe UI,sans-serif" font-size="10" fill="#888">12-hour (AM/PM)</text>
+                                <rect x="150" y="235" width="100" height="28" rx="4" fill="#2C5F8A"/>
+                                <text x="200" y="254" font-family="Segoe UI,sans-serif" font-size="11" fill="#FFFFFF" font-weight="600" text-anchor="middle">Submit</text>
+                            </svg>
+                        </div>
+                        <figcaption><span class="page-ref">Instructor Guide pp. 8&ndash;9</span> &mdash; Set your time zone, date format, time format, and first day of week. These settings affect how the scheduler displays.</figcaption>
+                    </figure>
+                    <div class="tip info" role="note">
+                        <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#0277BD" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        <div>When traveling, change your time zone to match the local time. NETLAB+ adjusts for Daylight Savings Time automatically.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: MYNETLAB INTERFACE -->
+<section class="section" id="interface">
+    <div class="section-header" tabindex="0" role="button" aria-expanded="true" aria-controls="interface-body" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+        <div class="section-icon teal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div style="flex:1">
+            <h2>2. MyNETLAB Interface
+                <span class="section-desc">Navigate the home page, settings, and key menu options</span>
+            </h2>
+        </div>
+        <div class="collapse-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="section-body" id="interface-body">
+
+        <p>After a successful login, the <strong>MyNETLAB page</strong> is displayed. This is your home page. Any scheduled lab reservations will appear here, along with the option to create a New Lab Reservation.</p>
+
+        <!-- Screenshot: MyNETLAB Interface -->
+        <figure class="screenshot-figure">
+            <div class="screenshot-img">
+                <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MyNETLAB home page showing the navigation bar with Help, Schedule, Manage, and username menus, plus the Scheduled Lab Reservations area and New Lab Reservation button">
+                    <rect width="700" height="320" fill="#F4F6FA"/>
+                    <!-- Top nav bar -->
+                    <rect x="0" y="0" width="700" height="45" fill="#FFFFFF" stroke="#D0D8E0"/>
+                    <rect x="10" y="8" width="80" height="28" rx="4" fill="#2C5F8A"/>
+                    <text x="50" y="27" font-family="Segoe UI,sans-serif" font-size="12" fill="#FFFFFF" font-weight="700" text-anchor="middle">NDG</text>
+                    <text x="280" y="28" font-family="Segoe UI,sans-serif" font-size="11" fill="#2C5F8A" font-weight="600">Help</text>
+                    <text x="350" y="28" font-family="Segoe UI,sans-serif" font-size="11" fill="#2C5F8A" font-weight="600">Schedule ▾</text>
+                    <text x="450" y="28" font-family="Segoe UI,sans-serif" font-size="11" fill="#2C5F8A" font-weight="600">Manage ▾</text>
+                    <text x="600" y="28" font-family="Segoe UI,sans-serif" font-size="11" fill="#2C5F8A" font-weight="600">👤 testinstructor ▾</text>
+                    <!-- Main content -->
+                    <rect x="30" y="60" width="640" height="240" rx="6" fill="#FFFFFF" stroke="#D0D8E0"/>
+                    <text x="55" y="88" font-family="Segoe UI,sans-serif" font-size="13" fill="#1B2A4A" font-weight="600">MyNETLAB</text>
+                    <text x="55" y="118" font-family="Segoe UI,sans-serif" font-size="14" fill="#1B2A4A" font-weight="700">📅 Scheduled Lab Reservations</text>
+                    <rect x="55" y="135" width="590" height="100" rx="4" fill="#F8FAFC" stroke="#E0E0E0"/>
+                    <!-- Sample reservation row -->
+                    <text x="75" y="165" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">ID</text>
+                    <text x="130" y="165" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">Date/Time</text>
+                    <text x="310" y="165" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">Description</text>
+                    <text x="520" y="165" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">Pod</text>
+                    <line x1="55" y1="175" x2="645" y2="175" stroke="#E0E0E0"/>
+                    <text x="75" y="195" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">28</text>
+                    <text x="130" y="195" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">2024-03-15 10:00AM</text>
+                    <rect x="130" y="200" width="80" height="22" rx="3" fill="#E53935"/>
+                    <text x="170" y="215" font-family="Segoe UI,sans-serif" font-size="10" fill="#FFFFFF" font-weight="600" text-anchor="middle">Enter Lab ▸</text>
+                    <text x="310" y="195" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">Class: Ethical Hacking</text>
+                    <text x="520" y="195" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">EH_POD1</text>
+                    <!-- New Reservation button -->
+                    <rect x="55" y="250" width="170" height="30" rx="4" fill="#43A047"/>
+                    <text x="140" y="270" font-family="Segoe UI,sans-serif" font-size="11" fill="#FFFFFF" font-weight="600" text-anchor="middle">✚ New Lab Reservation</text>
+                </svg>
+            </div>
+            <figcaption><span class="page-ref">Instructor Guide p. 10</span> &mdash; The MyNETLAB home page. The top menu bar provides access to Help, Schedule, Manage, and your account Settings.</figcaption>
+        </figure>
+
+        <div class="key-point">
+            <strong>Key menu areas for instructors:</strong> The <strong>Schedule</strong> menu is used to schedule and manage lab reservations. The <strong>Manage</strong> menu provides access to class rosters and usage reporting. Your <strong>username menu</strong> (top-right) contains Settings and Logout.
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Modify User Settings</h3>
+            <p>Click your <strong>username</strong> in the top-right corner and select <strong>Settings</strong> to access your account settings page. From here you can change your password, update your email, or adjust date and time display preferences.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Logout</h3>
+            <p>Click your <strong>username</strong> in the top-right corner and select <strong>Logout</strong>. A confirmation message will display with the option to Log In Again.</p>
+            <div class="tip warning" role="note">
+                <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#E65100" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <div>Logging out is especially important on shared computers to prevent unauthorized access to your account.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: MANAGE CLASS ROSTER -->
+<section class="section" id="roster">
+    <div class="section-header" tabindex="0" role="button" aria-expanded="true" aria-controls="roster-body" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+        <div class="section-icon green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div style="flex:1">
+            <h2>3. Manage Your Class Roster
+                <span class="section-desc">Add or drop learners, create teams, reset passwords, and view student details</span>
+            </h2>
+        </div>
+        <div class="collapse-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="section-body" id="roster-body">
+
+        <p>As a lead instructor, you can manage the learners (students and other users) enrolled in your class. Access class management by clicking <strong>Manage</strong> in the top menu, then selecting <strong>Classes</strong>, and clicking on your class name.</p>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Add Learners to the Class Roster</h3>
+            <div class="step-list">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <p>Select the <strong>Roster</strong> tab on the class page and click <strong>Add Learners</strong>.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <p>A list of user accounts in the community will be displayed. Check the <strong>Select</strong> boxes for the learners you want to add and click <strong>Add Selected</strong>.</p>
+                        <figure class="screenshot-figure">
+                            <div class="screenshot-img">
+                                <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Add Learners page showing a list of community accounts with Select checkboxes and an Add Selected button">
+                                    <rect width="700" height="260" fill="#F4F6FA"/>
+                                    <rect x="30" y="10" width="640" height="240" rx="6" fill="#FFFFFF" stroke="#D0D8E0"/>
+                                    <text x="55" y="38" font-family="Segoe UI,sans-serif" font-size="14" fill="#1B2A4A" font-weight="700">Add Learners to Class</text>
+                                    <!-- Table header -->
+                                    <text x="55" y="68" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677" font-weight="600">Select</text>
+                                    <text x="115" y="68" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677" font-weight="600">Username</text>
+                                    <text x="250" y="68" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677" font-weight="600">Name</text>
+                                    <text x="420" y="68" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677" font-weight="600">Type</text>
+                                    <text x="530" y="68" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677" font-weight="600">Email</text>
+                                    <line x1="55" y1="75" x2="645" y2="75" stroke="#E0E0E0"/>
+                                    <!-- Rows -->
+                                    <rect x="60" y="83" width="14" height="14" rx="2" fill="#2C5F8A"/><text x="63" y="94" font-family="Segoe UI,sans-serif" font-size="10" fill="#FFF">✓</text>
+                                    <text x="115" y="95" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">teststudent</text>
+                                    <text x="250" y="95" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">Test Student</text>
+                                    <text x="420" y="95" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">Student</text>
+                                    <rect x="60" y="108" width="14" height="14" rx="2" fill="#2C5F8A"/><text x="63" y="119" font-family="Segoe UI,sans-serif" font-size="10" fill="#FFF">✓</text>
+                                    <text x="115" y="120" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">jsmith01</text>
+                                    <text x="250" y="120" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">Jane Smith</text>
+                                    <text x="420" y="120" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">Student</text>
+                                    <rect x="60" y="133" width="14" height="14" rx="2" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                    <text x="115" y="145" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">testinstructor</text>
+                                    <text x="250" y="145" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">Test Instructor</text>
+                                    <text x="420" y="145" font-family="Segoe UI,sans-serif" font-size="10" fill="#888">Lead</text>
+                                    <!-- Add Selected button -->
+                                    <rect x="55" y="180" width="140" height="28" rx="4" fill="#2C5F8A"/>
+                                    <text x="125" y="199" font-family="Segoe UI,sans-serif" font-size="11" fill="#FFFFFF" font-weight="600" text-anchor="middle">Add Selected</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="page-ref">Instructor Guide pp. 29&ndash;30</span> &mdash; Select learners from the community user list and click Add Selected to add them to the class roster.</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Drop Learners from the Roster</h3>
+            <p>Select the <strong>Drop from Roster</strong> option on the <strong>Action</strong> dropdown for the learner you want to remove. You will be prompted to confirm. To drop multiple learners at once, check multiple <strong>Select</strong> boxes, click <strong>Selected Items</strong>, then choose <strong>Drop from Roster</strong>.</p>
+            <div class="tip info" role="note">
+                <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#0277BD" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <div>Dropping a learner from the roster does <strong>not</strong> delete their user account. The account remains on the system and can be added to other classes.</div>
+            </div>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>View User Account Details &amp; Labs</h3>
+            <p>Click the <strong>Action</strong> dropdown on any roster member and select <strong>View User Account</strong> to see their details, or <strong>View User Labs</strong> to see the labs completed by that learner for the class.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Group the Class Roster Into Teams</h3>
+            <p>Teams allow students to share lab reservations and work in groups. To assign teams, select the learners using the checkboxes, click <strong>Selected Items</strong>, then <strong>Add to Team</strong>. Choose a team letter (A through Z) and click <strong>Submit</strong>.</p>
+            <div class="tip info" role="note">
+                <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#0277BD" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <div>Lead instructors are not assigned to a team but may participate in the lab reservations for any team. The class &ldquo;self-study lab access&rdquo; setting must be enabled for team reservations.</div>
+            </div>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Reset Account Passwords for Learners</h3>
+            <p>To reset passwords for one or more learners, select the learners using the checkboxes, click <strong>Selected Items</strong>, then <strong>Reset Password</strong>. Enter a temporary password (7+ characters, letters and numbers). The learner will be required to change it on their next login.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: SCHEDULING -->
+<section class="section" id="scheduling">
+    <div class="section-header" tabindex="0" role="button" aria-expanded="true" aria-controls="scheduling-body" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+        <div class="section-icon orange">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div style="flex:1">
+            <h2>4. Schedule Lab Reservations
+                <span class="section-desc">Instructor-led training, student labs, team labs, and personal use</span>
+            </h2>
+        </div>
+        <div class="collapse-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="section-body" id="scheduling-body">
+
+        <p>NETLAB+ offers several scheduling options, accessible from the <strong>Schedule</strong> menu on the top menu bar or by clicking the <strong>New Lab Reservation</strong> button on MyNETLAB.</p>
+
+        <div class="key-point">
+            <strong>Scheduling options available to you:</strong><br>
+            &bull; <strong>Schedule Instructor-Led Training (ILT)</strong> &mdash; You and the entire class share the same reservation<br>
+            &bull; <strong>Schedule Lab for Myself</strong> &mdash; Personal practice on lab equipment<br>
+            &bull; <strong>Schedule Lab for a Student</strong> &mdash; Assign a specific student to a lab exercise<br>
+            &bull; <strong>Schedule Lab for a Team</strong> &mdash; A team shares the lab reservation<br>
+            &bull; <strong>View or Cancel Reservations</strong> &mdash; Manage existing reservations
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Schedule Instructor-Led Training (ILT)</h3>
+            <p>This is the most common option for teaching. You and your entire class will share the same lab reservation.</p>
+            <div class="step-list">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <p>Click <strong>Schedule</strong> &gt; <strong>Schedule Instructor-Led Training</strong>.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <p>Select the <strong>class</strong> that will be using the lab by clicking anywhere on the row. If you lead only one class, you will skip this step.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <p>A list of <strong>lab exercises</strong> associated with the class will appear. Click the lab name to select it. You may also use the <strong>search box</strong> in the upper-right to find a specific lab, or use the <strong>Action dropdown &gt; Preview Lab</strong> to preview the content.</p>
+                        <figure class="screenshot-figure">
+                            <div class="screenshot-img">
+                                <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lab exercises list showing lab names with Schedule Lab and Preview Lab options in the Action dropdown">
+                                    <rect width="700" height="220" fill="#F4F6FA"/>
+                                    <rect x="30" y="10" width="640" height="200" rx="6" fill="#FFFFFF" stroke="#D0D8E0"/>
+                                    <text x="55" y="38" font-family="Segoe UI,sans-serif" font-size="13" fill="#1B2A4A" font-weight="700">Lab Exercises &mdash; Ethical Hacking Spring 2024</text>
+                                    <rect x="500" y="20" width="140" height="24" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                    <text x="515" y="36" font-family="Segoe UI,sans-serif" font-size="10" fill="#999">🔍 Search...</text>
+                                    <line x1="55" y1="52" x2="645" y2="52" stroke="#E0E0E0"/>
+                                    <text x="55" y="75" font-family="Segoe UI,sans-serif" font-size="11" fill="#2C5F8A" font-weight="600" text-decoration="underline">Lab 01: Reconnaissance with Nmap and Amap</text>
+                                    <text x="580" y="75" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">Action ▾</text>
+                                    <line x1="55" y1="87" x2="645" y2="87" stroke="#F0F0F0"/>
+                                    <text x="55" y="107" font-family="Segoe UI,sans-serif" font-size="11" fill="#2C5F8A" font-weight="600" text-decoration="underline">Lab 02: Vulnerability Scanning with OpenVAS</text>
+                                    <text x="580" y="107" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">Action ▾</text>
+                                    <line x1="55" y1="119" x2="645" y2="119" stroke="#F0F0F0"/>
+                                    <text x="55" y="139" font-family="Segoe UI,sans-serif" font-size="11" fill="#2C5F8A" font-weight="600" text-decoration="underline">Lab 03: SQL Injection and XSS Attacks</text>
+                                    <text x="580" y="139" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">Action ▾</text>
+                                    <line x1="55" y1="151" x2="645" y2="151" stroke="#F0F0F0"/>
+                                    <text x="55" y="171" font-family="Segoe UI,sans-serif" font-size="11" fill="#2C5F8A" font-weight="600" text-decoration="underline">Lab 04: Web Pentesting with Nikto and OWASP Zap</text>
+                                    <text x="580" y="171" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">Action ▾</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="page-ref">Instructor Guide pp. 118&ndash;119</span> &mdash; Select a lab exercise from the list. Use the search box or Action dropdown to preview content before scheduling.</figcaption>
+                        </figure>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <p>The <strong>Pod Scheduler</strong> will be displayed. Use the <strong>calendar</strong> (upper-left) to select a date. The schedule table shows available pods as columns and time slots as rows. The <strong>red line</strong> indicates the current time.</p>
+                        <figure class="screenshot-figure">
+                            <div class="screenshot-img">
+                                <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pod Scheduler showing a calendar on the left, current time, and a scheduling grid with pods as columns and time slots as rows, with a red line indicating current time">
+                                    <rect width="700" height="300" fill="#F4F6FA"/>
+                                    <rect x="20" y="10" width="660" height="280" rx="6" fill="#FFFFFF" stroke="#D0D8E0"/>
+                                    <text x="45" y="38" font-family="Segoe UI,sans-serif" font-size="13" fill="#1B2A4A" font-weight="700">Pod Scheduler</text>
+                                    <!-- Calendar box -->
+                                    <rect x="45" y="50" width="160" height="120" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                    <text x="125" y="70" font-family="Segoe UI,sans-serif" font-size="10" fill="#333" text-anchor="middle" font-weight="600">◄ March 2024 ►</text>
+                                    <text x="60" y="88" font-family="Segoe UI,sans-serif" font-size="8" fill="#999">Su Mo Tu We Th Fr Sa</text>
+                                    <text x="60" y="102" font-family="Segoe UI,sans-serif" font-size="8" fill="#333"> 3   4   5   6   7   8   9</text>
+                                    <text x="60" y="116" font-family="Segoe UI,sans-serif" font-size="8" fill="#333">10 11 12 13 14</text>
+                                    <rect x="113" y="109" width="14" height="12" rx="2" fill="#2C5F8A"/>
+                                    <text x="116" y="118" font-family="Segoe UI,sans-serif" font-size="8" fill="#FFF">15</text>
+                                    <text x="131" y="116" font-family="Segoe UI,sans-serif" font-size="8" fill="#333">16</text>
+                                    <text x="45" y="150" font-family="Segoe UI,sans-serif" font-size="9" fill="#5A6677">Selected: 2024-03-15</text>
+                                    <text x="45" y="162" font-family="Segoe UI,sans-serif" font-size="9" fill="#5A6677">Current: 10:15 AM</text>
+                                    <!-- Schedule grid -->
+                                    <rect x="230" y="50" width="430" height="220" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                                    <text x="310" y="68" font-family="Segoe UI,sans-serif" font-size="10" fill="#1B2A4A" font-weight="600" text-anchor="middle">Pod 1</text>
+                                    <text x="430" y="68" font-family="Segoe UI,sans-serif" font-size="10" fill="#1B2A4A" font-weight="600" text-anchor="middle">Pod 2</text>
+                                    <text x="550" y="68" font-family="Segoe UI,sans-serif" font-size="10" fill="#1B2A4A" font-weight="600" text-anchor="middle">Pod 3</text>
+                                    <line x1="230" y1="75" x2="660" y2="75" stroke="#D0D8E0"/>
+                                    <!-- Time slots -->
+                                    <text x="245" y="95" font-family="Segoe UI,sans-serif" font-size="9" fill="#5A6677">9:00</text>
+                                    <rect x="275" y="82" width="100" height="20" rx="3" fill="#E0E0E0" opacity="0.5"/>
+                                    <rect x="395" y="82" width="100" height="20" rx="3" fill="#E0E0E0" opacity="0.5"/>
+                                    <rect x="515" y="82" width="100" height="20" rx="3" fill="#E0E0E0" opacity="0.5"/>
+                                    <text x="245" y="120" font-family="Segoe UI,sans-serif" font-size="9" fill="#5A6677">10:00</text>
+                                    <rect x="275" y="107" width="100" height="20" rx="3" fill="#E0E0E0" opacity="0.5"/>
+                                    <rect x="395" y="107" width="100" height="20" rx="3" fill="#FFCDD2"/>
+                                    <text x="445" y="121" font-family="Segoe UI,sans-serif" font-size="8" fill="#C62828" text-anchor="middle">Reserved</text>
+                                    <rect x="515" y="107" width="100" height="20" rx="3" fill="#E0E0E0" opacity="0.5"/>
+                                    <!-- Red line for current time -->
+                                    <line x1="230" y1="133" x2="660" y2="133" stroke="#E53935" stroke-width="2"/>
+                                    <text x="245" y="152" font-family="Segoe UI,sans-serif" font-size="9" fill="#5A6677">11:00</text>
+                                    <rect x="275" y="139" width="100" height="20" rx="3" fill="#C8E6C9" stroke="#43A047" stroke-dasharray="3"/>
+                                    <text x="325" y="153" font-family="Segoe UI,sans-serif" font-size="8" fill="#2E7D32" text-anchor="middle">Available ✓</text>
+                                    <rect x="395" y="139" width="100" height="20" rx="3" fill="#C8E6C9" stroke="#43A047" stroke-dasharray="3"/>
+                                    <rect x="515" y="139" width="100" height="20" rx="3" fill="#C8E6C9" stroke="#43A047" stroke-dasharray="3"/>
+                                    <text x="245" y="182" font-family="Segoe UI,sans-serif" font-size="9" fill="#5A6677">12:00</text>
+                                    <rect x="275" y="169" width="100" height="20" rx="3" fill="#C8E6C9" stroke="#43A047" stroke-dasharray="3"/>
+                                    <rect x="395" y="169" width="100" height="20" rx="3" fill="#C8E6C9" stroke="#43A047" stroke-dasharray="3"/>
+                                    <rect x="515" y="169" width="100" height="20" rx="3" fill="#C8E6C9" stroke="#43A047" stroke-dasharray="3"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="page-ref">Instructor Guide pp. 120&ndash;122</span> &mdash; The Pod Scheduler. Click an available time slot below the red line (current time) on a pod to make a reservation. The End Time can be adjusted before submitting.</figcaption>
+                        </figure>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <p>Click an <strong>available time slot</strong> below the red line. Review the reservation details, adjust the <strong>End Time</strong> if needed, and click <strong>Submit</strong>. A confirmation message will appear.</p>
+                        <div class="tip info" role="note">
+                            <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#0277BD" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <div>The last 10 minutes of a lab reservation are used for system cleanup and reset. A 1-hour time slot provides 50 minutes of lab time. Time limits are not enforced for instructor-led training reservations.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <p>The ILT reservation will appear on your MyNETLAB page <strong>and</strong> on the MyNETLAB page of every learner in the class roster, allowing them to enter and participate.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Schedule Lab for Myself</h3>
+            <p>Use this option for personal practice. Select <strong>Schedule</strong> &gt; <strong>Schedule Lab for Myself</strong>, choose a class, select a lab exercise, and pick a time on the Pod Scheduler. Only you will have access to this reservation.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Schedule Lab for a Student</h3>
+            <p>Designate a specific student to work on an exercise. Select the class, then the student from the roster, then the lab exercise, and finally a time on the Pod Scheduler. As the lead instructor, you have the option of participating alongside the student.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Schedule Lab for a Team</h3>
+            <p>Select the class, then the team (students must already be assigned to teams), then the lab and time. Team members share access to the lab equipment during the reservation.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>View or Cancel Reservations</h3>
+            <p>Select <strong>Schedule</strong> &gt; <strong>View or Cancel Lab Reservations</strong> to see all scheduled reservations. Use the <strong>Action</strong> dropdown to <strong>View</strong> details or <strong>Cancel</strong> a reservation. You will be prompted to confirm cancellations.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 5: ENTER A LAB SESSION -->
+<section class="section" id="labsession">
+    <div class="section-header" tabindex="0" role="button" aria-expanded="true" aria-controls="labsession-body" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+        <div class="section-icon green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <div style="flex:1">
+            <h2>5. Enter a Lab Session
+                <span class="section-desc">Navigate the lab interface, access devices, and use lab tools</span>
+            </h2>
+        </div>
+        <div class="collapse-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="section-body" id="labsession-body">
+
+        <p>At the scheduled time, an <strong>Enter Lab</strong> button will appear on your MyNETLAB page. Click it to launch the lab access interface.</p>
+
+        <figure class="screenshot-figure">
+            <div class="screenshot-img">
+                <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MyNETLAB page showing an active lab reservation with a red Enter Lab button">
+                    <rect width="700" height="160" fill="#F4F6FA"/>
+                    <rect x="30" y="15" width="640" height="130" rx="6" fill="#FFFFFF" stroke="#D0D8E0"/>
+                    <text x="55" y="42" font-family="Segoe UI,sans-serif" font-size="13" fill="#1B2A4A" font-weight="700">📅 Scheduled Lab Reservations</text>
+                    <text x="55" y="72" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">ID: 28 &nbsp;&nbsp; 2024-03-15 11:00AM &nbsp;&nbsp; 0.9 hours</text>
+                    <rect x="55" y="80" width="90" height="24" rx="4" fill="#E53935"/>
+                    <text x="100" y="96" font-family="Segoe UI,sans-serif" font-size="10" fill="#FFFFFF" font-weight="700" text-anchor="middle">Enter Lab ▸</text>
+                    <text x="160" y="96" font-family="Segoe UI,sans-serif" font-size="10" fill="#333">Class: Ethical Hacking &mdash; ILT &mdash; Lab 01: Reconnaissance</text>
+                </svg>
+            </div>
+            <figcaption><span class="page-ref">Instructor Guide p. 124 &amp; 145</span> &mdash; Click the Enter Lab button at the scheduled time. You may need to refresh your browser if it does not appear.</figcaption>
+        </figure>
+
+        <div class="tip warning" role="note">
+            <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#E65100" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div>You may see the <strong>Initializing POD</strong> indicator at the beginning of your session. This means NETLAB+ is preparing the lab devices. Allow the initialization to complete before proceeding.</div>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Lab Interface Tabs</h3>
+            <p>The lab access interface is divided into several tabbed sections. A <strong>Time Remaining</strong> indicator is displayed in the upper-right corner.</p>
+
+            <figure class="screenshot-figure">
+                <div class="screenshot-img">
+                    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lab access interface showing tabs for Topology, Content, Status, and device tabs (R1, R2, R3, S1, PC A, PC B) with a Time Remaining indicator">
+                        <rect width="700" height="300" fill="#F4F6FA"/>
+                        <!-- Top bar -->
+                        <rect x="0" y="0" width="700" height="36" fill="#FFFFFF" stroke="#D0D8E0"/>
+                        <text x="20" y="23" font-family="Segoe UI,sans-serif" font-size="10" fill="#5A6677">CCNA_MAP_5 &gt; Reservation 7261 &gt; Lab 01</text>
+                        <text x="350" y="23" font-family="Segoe UI,sans-serif" font-size="10" fill="#2C5F8A" font-weight="600">Home</text>
+                        <text x="420" y="23" font-family="Segoe UI,sans-serif" font-size="10" fill="#2C5F8A" font-weight="600">Pod ▾</text>
+                        <text x="500" y="23" font-family="Segoe UI,sans-serif" font-size="10" fill="#2C5F8A" font-weight="600">Reservation ▾</text>
+                        <rect x="600" y="6" width="85" height="24" rx="4" fill="#F8FAFC" stroke="#D0D8E0"/>
+                        <text x="612" y="18" font-family="Segoe UI,sans-serif" font-size="8" fill="#5A6677">Time Remaining</text>
+                        <text x="640" y="28" font-family="Segoe UI,sans-serif" font-size="11" fill="#E53935" font-weight="700">0 hrs 42 min</text>
+                        <!-- Tabs -->
+                        <rect x="0" y="36" width="700" height="30" fill="#E8EEF4"/>
+                        <rect x="10" y="38" width="75" height="26" rx="4" fill="#2C5F8A"/>
+                        <text x="47" y="55" font-family="Segoe UI,sans-serif" font-size="10" fill="#FFFFFF" font-weight="600" text-anchor="middle">Topology</text>
+                        <rect x="90" y="38" width="75" height="26" rx="4" fill="#FFFFFF" stroke="#D0D8E0"/>
+                        <text x="127" y="55" font-family="Segoe UI,sans-serif" font-size="10" fill="#333" font-weight="600" text-anchor="middle">Content ▾</text>
+                        <rect x="170" y="38" width="60" height="26" rx="4" fill="#FFFFFF" stroke="#D0D8E0"/>
+                        <text x="200" y="55" font-family="Segoe UI,sans-serif" font-size="10" fill="#333" font-weight="600" text-anchor="middle">Status</text>
+                        <rect x="240" y="38" width="45" height="26" rx="4" fill="#FFFFFF" stroke="#D0D8E0"/>
+                        <text x="262" y="55" font-family="Segoe UI,sans-serif" font-size="10" fill="#333" font-weight="500" text-anchor="middle">R1 ▾</text>
+                        <rect x="290" y="38" width="45" height="26" rx="4" fill="#FFFFFF" stroke="#D0D8E0"/>
+                        <text x="312" y="55" font-family="Segoe UI,sans-serif" font-size="10" fill="#333" font-weight="500" text-anchor="middle">R2 ▾</text>
+                        <rect x="340" y="38" width="45" height="26" rx="4" fill="#FFFFFF" stroke="#D0D8E0"/>
+                        <text x="362" y="55" font-family="Segoe UI,sans-serif" font-size="10" fill="#333" font-weight="500" text-anchor="middle">R3 ▾</text>
+                        <rect x="390" y="38" width="45" height="26" rx="4" fill="#FFFFFF" stroke="#D0D8E0"/>
+                        <text x="412" y="55" font-family="Segoe UI,sans-serif" font-size="10" fill="#333" font-weight="500" text-anchor="middle">S1 ▾</text>
+                        <rect x="440" y="38" width="55" height="26" rx="4" fill="#FFFFFF" stroke="#D0D8E0"/>
+                        <text x="467" y="55" font-family="Segoe UI,sans-serif" font-size="10" fill="#333" font-weight="500" text-anchor="middle">PC A ▾</text>
+                        <rect x="500" y="38" width="55" height="26" rx="4" fill="#FFFFFF" stroke="#D0D8E0"/>
+                        <text x="527" y="55" font-family="Segoe UI,sans-serif" font-size="10" fill="#333" font-weight="500" text-anchor="middle">PC B ▾</text>
+                        <!-- Topology view -->
+                        <rect x="20" y="76" width="660" height="210" rx="4" fill="#F0F4F8"/>
+                        <text x="350" y="100" font-family="Segoe UI,sans-serif" font-size="12" fill="#1B2A4A" font-weight="600" text-anchor="middle">[Lab Topology Diagram]</text>
+                        <!-- Simplified network diagram -->
+                        <circle cx="250" cy="160" r="22" fill="#FFECB3" stroke="#F57F17" stroke-width="1.5"/>
+                        <text x="250" y="164" font-family="Segoe UI,sans-serif" font-size="9" fill="#333" text-anchor="middle" font-weight="600">R1</text>
+                        <circle cx="450" cy="160" r="22" fill="#FFECB3" stroke="#F57F17" stroke-width="1.5"/>
+                        <text x="450" y="164" font-family="Segoe UI,sans-serif" font-size="9" fill="#333" text-anchor="middle" font-weight="600">R2</text>
+                        <line x1="272" y1="160" x2="428" y2="160" stroke="#333" stroke-width="1.5"/>
+                        <circle cx="350" cy="130" r="18" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5"/>
+                        <text x="350" y="134" font-family="Segoe UI,sans-serif" font-size="8" fill="#333" text-anchor="middle" font-weight="600">S1</text>
+                        <rect x="200" y="210" width="50" height="30" rx="3" fill="#C8E6C9" stroke="#2E7D32"/>
+                        <text x="225" y="229" font-family="Segoe UI,sans-serif" font-size="8" fill="#333" text-anchor="middle">PC-A</text>
+                        <rect x="430" y="210" width="50" height="30" rx="3" fill="#C8E6C9" stroke="#2E7D32"/>
+                        <text x="455" y="229" font-family="Segoe UI,sans-serif" font-size="8" fill="#333" text-anchor="middle">PC-B</text>
+                        <line x1="225" y1="210" x2="250" y2="182" stroke="#333"/>
+                        <line x1="455" y1="210" x2="450" y2="182" stroke="#333"/>
+                        <line x1="350" y1="148" x2="350" y2="160" stroke="#333"/>
+                    </svg>
+                </div>
+                <figcaption><span class="page-ref">Instructor Guide pp. 146&ndash;148</span> &mdash; The lab interface with Topology, Content, Status, and device tabs. Click any device icon in the topology to switch to that device&rsquo;s tab.</figcaption>
+            </figure>
+
+            <div class="key-point">
+                <strong>Tab descriptions:</strong><br>
+                &bull; <strong>Topology</strong> &mdash; Displays the network diagram with IP addresses and connections. Click a device icon to access it.<br>
+                &bull; <strong>Content</strong> &mdash; Shows the lab instructions (PDF). You can zoom, download, or print.<br>
+                &bull; <strong>Status</strong> &mdash; Shows power state and options for all devices (Power On/Off, Send CTRL+ALT+DEL, Undock, etc.).<br>
+                &bull; <strong>Device tabs (R1, R2, S1, PC A, etc.)</strong> &mdash; Click to interact with each device directly.
+            </div>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Accessing &amp; Interacting with Devices</h3>
+            <p>Click on a device tab (e.g., <strong>R1</strong>) to interact with it. For routers and switches, you will see a CLI terminal where you can enter commands. Click the device tab name again to access additional options:</p>
+            <p>&bull; <strong>Send Break Key</strong> &mdash; Simulate the Break Key sequence<br>
+            &bull; <strong>Copy Selected Text</strong> &mdash; Copy text from the terminal<br>
+            &bull; <strong>Paste to Terminal</strong> &mdash; Paste configuration text (use this instead of direct clipboard paste)<br>
+            &bull; <strong>Undock/Dock</strong> &mdash; Display the device in its own floating window<br>
+            &bull; <strong>Password Recovery</strong> &mdash; Remove console and enable passwords (instructor only in ILT)<br>
+            &bull; <strong>Load/Save/Erase Configuration</strong> &mdash; Manage device configurations<br>
+            &bull; <strong>Terminal Settings</strong> &mdash; Customize background color, text color, and font size</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Pod-wide Device Automation</h3>
+            <p>Use the <strong>Pod</strong> menu option at the top of the lab interface to perform actions on <strong>all devices at once</strong>: Erase All Devices, Load All Devices, or Save All Devices.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Screenshots of Remote PCs</h3>
+            <p>Click on a PC tab and select <strong>Take Screenshot</strong> to capture the current state. Add an optional note and click Submit. Screenshots are saved in the lab history for review via Usage reporting. You can direct students to take screenshots to document their progress.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Extend a Reservation</h3>
+            <p>If additional time is needed during a lab, click <strong>Reservation</strong> in the top menu and select <strong>Extend Reservation</strong>. Select an extended end time (subject to pod availability) and click Submit.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>End a Reservation</h3>
+            <p>When you are finished, click <strong>Reservation</strong> &gt; <strong>End Reservation</strong> and confirm. This ends the session for all participants (in ILT mode). The reservation will also end automatically when the reserved time expires.</p>
+            <div class="tip danger" role="note">
+                <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#C62828" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                <div><strong>For ILT sessions:</strong> Ending the reservation ends it for the entire class, not just yourself. Confirm that all students are finished before ending.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 6: USAGE REPORTING -->
+<section class="section" id="usage">
+    <div class="section-header" tabindex="0" role="button" aria-expanded="true" aria-controls="usage-body" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+        <div class="section-icon" style="background:#F3E5F5;color:#6A1B9A;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div style="flex:1">
+            <h2>6. Usage Reporting
+                <span class="section-desc">Track lab activity at the class, account, and lab level</span>
+            </h2>
+        </div>
+        <div class="collapse-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="section-body" id="usage-body">
+
+        <p>Usage reporting allows you to monitor student and class activity. Access it by clicking <strong>Manage</strong> &gt; <strong>Usage</strong>.</p>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Class Usage</h3>
+            <p>Select <strong>MyNETLAB &gt; Classes</strong> on the Usage page. Choose your class(es), reservation type(s), and optional date range, then click <strong>Submit</strong>. The report shows Reservations Made, Labs Attended, Hours Reserved, and Hours Attended. Click any column header to sort. You can <strong>Export</strong> the data to a CSV file.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Account Usage</h3>
+            <p>Select <strong>MyNETLAB &gt; Accounts</strong> on the Usage page. This shows usage per individual user, including User ID, Name, Email, and lab activity metrics. This data can also be exported to CSV.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Lab Usage</h3>
+            <p>Select <strong>MyNETLAB &gt; Labs</strong> on the Usage page. This report shows usage at the lab exercise level, including which students completed which labs and for how long. You can aggregate results by lab and/or by account.</p>
+        </div>
+
+        <div class="subsection">
+            <h3><span class="sub-icon"></span>Lab History &amp; Screenshots</h3>
+            <p>From Lab Usage details, you can view the <strong>lab history</strong> for individual reservations, including session logs, command indexes, final configurations, and any screenshots taken during the session. This is useful for assessing student work.</p>
+            <div class="tip success" role="note">
+                <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <div><strong>Assessment tip:</strong> Direct students to take screenshots during lab sessions. These screenshots will appear in the lab history alongside session logs and device configurations, giving you a comprehensive view of their work.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- BACK TO TOP -->
+<button id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- FOOTER -->
+<footer>
+    <p>NETLAB+ VE Instructor Quick Start Guide &mdash; Based on NETLAB+ VE v20.5.0 Instructor Guide</p>
+    <p style="margin-top:6px;">Copyright &copy; 2020 Network Development Group, Inc. &mdash; <a href="https://www.netdevgroup.com" target="_blank" rel="noopener">www.netdevgroup.com</a></p>
+    <p style="margin-top:6px;font-size:0.75rem;opacity:0.7;">NETLAB+ is a registered trademark of Network Development Group, Inc.</p>
+</footer>
+
+<script>
+/* ===== COLLAPSE SECTIONS ===== */
+function toggleSection(header) {
+    const section = header.closest('.section');
+    const isCollapsed = section.classList.toggle('collapsed');
+    header.setAttribute('aria-expanded', !isCollapsed);
+}
+
+/* ===== ACTIVE NAV HIGHLIGHT ===== */
+const navLinks = document.querySelectorAll('.nav-inner a');
+const sections = document.querySelectorAll('.section[id]');
+
+function updateActiveNav() {
+    let current = '';
+    sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 120) current = section.id;
+    });
+    navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+}
+
+/* ===== PROGRESS BAR ===== */
+function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    const bar = document.getElementById('progressBar');
+    bar.style.width = progress + '%';
+    bar.setAttribute('aria-valuenow', Math.round(progress));
+}
+
+/* ===== BACK TO TOP ===== */
+function updateBackToTop() {
+    document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
+}
+
+/* ===== SCROLL EVENTS ===== */
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        requestAnimationFrame(() => {
+            updateActiveNav();
+            updateProgress();
+            updateBackToTop();
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
+
+/* ===== SEARCH ===== */
+const searchInput = document.getElementById('globalSearch');
+const searchResults = document.getElementById('searchResults');
+
+// Build search index from content
+const searchIndex = [];
+document.querySelectorAll('.section').forEach(section => {
+    const id = section.id;
+    const header = section.querySelector('.section-header h2');
+    const sectionTitle = header ? header.childNodes[0].textContent.trim() : '';
+    
+    // Index each step, subsection, tip, and paragraph
+    section.querySelectorAll('.step-content, .subsection, .tip, .key-point, p').forEach(el => {
+        const text = el.textContent.trim();
+        if (text.length > 20) {
+            searchIndex.push({
+                sectionId: id,
+                sectionTitle: sectionTitle,
+                text: text,
+                element: el
+            });
+        }
+    });
+});
+
+function performSearch(query) {
+    if (!query || query.length < 2) {
+        searchResults.classList.remove('active');
+        return;
+    }
+    
+    const terms = query.toLowerCase().split(/\s+/);
+    const results = [];
+    
+    searchIndex.forEach(item => {
+        const textLower = item.text.toLowerCase();
+        const allMatch = terms.every(term => textLower.includes(term));
+        if (allMatch) {
+            // Calculate relevance
+            let score = 0;
+            terms.forEach(term => {
+                const idx = textLower.indexOf(term);
+                if (idx !== -1) score += (1 / (idx + 1)) * 10;
+            });
+            results.push({ ...item, score });
+        }
+    });
+    
+    results.sort((a, b) => b.score - a.score);
+    const unique = [];
+    const seen = new Set();
+    results.forEach(r => {
+        const key = r.sectionId + ':' + r.text.substring(0, 60);
+        if (!seen.has(key) && unique.length < 8) {
+            seen.add(key);
+            unique.push(r);
+        }
+    });
+    
+    if (unique.length === 0) {
+        searchResults.innerHTML = '<div class="search-no-results">No results found for &ldquo;' + escapeHtml(query) + '&rdquo;</div>';
+    } else {
+        searchResults.innerHTML = unique.map(r => {
+            const snippet = getSnippet(r.text, terms[0], 120);
+            const highlighted = highlightTerms(snippet, terms);
+            return `<div class="search-result-item" role="option" tabindex="0" 
+                data-section="${r.sectionId}" 
+                onclick="jumpToResult(this)" 
+                onkeydown="if(event.key==='Enter'){jumpToResult(this)}">
+                <div class="sr-section">${escapeHtml(r.sectionTitle)}</div>
+                <div class="sr-snippet">${highlighted}</div>
+            </div>`;
+        }).join('');
+    }
+    
+    searchResults.classList.add('active');
+}
+
+function getSnippet(text, term, maxLen) {
+    const lower = text.toLowerCase();
+    const idx = lower.indexOf(term.toLowerCase());
+    if (idx === -1) return text.substring(0, maxLen) + '…';
+    const start = Math.max(0, idx - 40);
+    const end = Math.min(text.length, idx + maxLen - 40);
+    let snippet = text.substring(start, end);
+    if (start > 0) snippet = '…' + snippet;
+    if (end < text.length) snippet += '…';
+    return snippet;
+}
+
+function highlightTerms(text, terms) {
+    let result = escapeHtml(text);
+    terms.forEach(term => {
+        const regex = new RegExp('(' + escapeRegex(term) + ')', 'gi');
+        result = result.replace(regex, '<mark>$1</mark>');
+    });
+    return result;
+}
+
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function jumpToResult(el) {
+    const sectionId = el.getAttribute('data-section');
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.classList.remove('collapsed');
+        const header = section.querySelector('.section-header');
+        if (header) header.setAttribute('aria-expanded', 'true');
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    searchResults.classList.remove('active');
+    searchInput.value = '';
+}
+
+let searchTimeout;
+searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => performSearch(searchInput.value.trim()), 200);
+});
+
+searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        searchResults.classList.remove('active');
+        searchInput.value = '';
+    }
+});
+
+// Close search results on outside click
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-wrapper')) {
+        searchResults.classList.remove('active');
+    }
+});
+
+/* ===== KEYBOARD NAV FOR SEARCH RESULTS ===== */
+searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const first = searchResults.querySelector('.search-result-item');
+        if (first) first.focus();
+    }
+});
+
+searchResults.addEventListener('keydown', (e) => {
+    const items = [...searchResults.querySelectorAll('.search-result-item')];
+    const idx = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown' && idx < items.length - 1) {
+        e.preventDefault();
+        items[idx + 1].focus();
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (idx > 0) items[idx - 1].focus();
+        else searchInput.focus();
+    }
+});
+
+/* Init */
+updateActiveNav();
+</script>
+</body>
+</html>
