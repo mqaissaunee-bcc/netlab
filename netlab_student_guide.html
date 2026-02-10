@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NETLAB+ Student Guide â€” Interactive Reference</title>
+<title>NETLAB+ Student Guide — Interactive Reference</title>
 <style>
 :root {
     --navy: #1B2A4A;
@@ -1104,11 +1104,47 @@ document.addEventListener('click', function(e) {
     if (!e.target.closest('.search-wrapper')) searchResults.classList.remove('active');
 });
 
+// Make sections focusable so we can move keyboard focus reliably after navigation
+document.querySelectorAll('.section').forEach(function(sec){
+    if (!sec.hasAttribute('tabindex')) sec.setAttribute('tabindex','-1');
+});
+
+function smoothScrollTo(target) {
+    const header = document.querySelector('header');
+    const offset = header ? (header.offsetHeight + 12) : 0;
+    const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+}
+
+function navigateToId(targetId, opts) {
+    opts = opts || {};
+    const closeSearch = (opts.closeSearch !== false);
+    if (closeSearch) {
+        searchResults.classList.remove('active');
+        searchInput.value = '';
+    }
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    smoothScrollTo(target);
+
+    // Keep URL hash in sync without filling the back button history with duplicates
+    if (location.hash !== '#' + targetId) {
+        history.replaceState(null, '', '#' + targetId);
+    }
+
+    // Focus after the scroll animation starts; preventScroll avoids "double jumping"
+    window.setTimeout(function(){
+        try { target.focus({ preventScroll: true }); }
+        catch(e) { try { target.focus(); } catch(_) {} }
+    }, 350);
+}
+
+// Backwards-compatible helper used by search results
 function jumpTo(id) {
-    searchResults.classList.remove('active');
-    searchInput.value = '';
-    const el = document.getElementById(id);
-    if (el) { el.scrollIntoView({behavior:'smooth',block:'start'}); el.focus(); }
+    navigateToId(id);
+}
+
 }
 
 // NAV ACTIVE STATE
@@ -1156,13 +1192,29 @@ window.addEventListener('scroll', function() {
 }, {passive:true});
 
 // FIX: Intercept all internal anchor links for reliable scroll behavior
+// Smooth in-page navigation with a sticky header offset.
+// Note: href="#" is left alone so it can behave like "jump to top" if ever used.
 document.querySelectorAll('a[href^="#"]').forEach(function(link) {
     link.addEventListener('click', function(e) {
-        const targetId = this.getAttribute('href').substring(1);
+        const href = this.getAttribute('href') || '';
+        const targetId = href.slice(1);
+        if (!targetId) return;
         const target = document.getElementById(targetId);
         if (target) {
             e.preventDefault();
-            target.scrollIntoView({behavior: 'smooth', block: 'start'});
+            navigateToId(targetId);
+        }
+    });
+});
+
+// If the page loads with a hash, scroll to it with the correct offset.
+window.addEventListener('load', function(){
+    const initialId = (location.hash || '').slice(1);
+    if (initialId && document.getElementById(initialId)) {
+        // Let the browser finish layout first
+        setTimeout(function(){ navigateToId(initialId, { closeSearch: false }); }, 0);
+    }
+});
             history.pushState(null, '', '#' + targetId);
         }
     });
